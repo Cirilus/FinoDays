@@ -10,6 +10,7 @@ from utils.errors import ErrEntityNotFound
 from schemas.CFAchema import CFARequest, CFASchema
 from services.CFA import CFAService
 from convertors.CFA import CFARequestToCFA
+from utils.wrappers import error_wrapper
 
 router = APIRouter(prefix="/api/v1/cfa", tags=["cfa"])
 
@@ -27,9 +28,9 @@ async def get_list(
         cfa_service: CFAService = Depends()
 ):
     logger.debug("CFA - Route - get_cfas")
-    cfa = cfa_service.get_list(
-        limit, offset, moderated, payment_method
-    )
+    cfa = error_wrapper(cfa_service.get_list,
+                        limit, offset, moderated, payment_method
+                        )
     return cfa
 
 
@@ -43,13 +44,7 @@ async def get_by_id(
         cfa_service: CFAService = Depends()
 ):
     logger.debug("CFA - Route - get_cfa_by_id")
-    try:
-        cfa = cfa_service.get_by_id(cfa_id)
-    except ErrEntityNotFound as e:
-        return JSONResponse(status_code=http.HTTPStatus.NOT_FOUND, content={"msg": str(e)})
-    except Exception as e:
-        logger.error(f"CFA - Route - get_cfa_by_id, err = {e}")
-        return JSONResponse(status_code=http.HTTPStatus.INTERNAL_SERVER_ERROR, content={"msg": str(e)})
+    cfa = error_wrapper(cfa_service.get_by_id, cfa_id)
     return cfa
 
 
@@ -66,12 +61,7 @@ async def update(
     logger.debug("CFA - Route - get_cfa_by_id")
 
     cfa = CFARequestToCFA(cfa_request)
-
-    try:
-        cfa = cfa_service.update(cfa_id, cfa)
-    except Exception as e:
-        logger.error(f"CFA - Route - get_cfa_by_id, err = {e}")
-        return JSONResponse(status_code=http.HTTPStatus.INTERNAL_SERVER_ERROR, content={"msg": str(e)})
+    cfa = error_wrapper(cfa_service.update, cfa_id, cfa)
     return cfa
 
 
@@ -85,14 +75,10 @@ async def delete(
         cfa_service: CFAService = Depends()
 ):
     logger.debug("CFA - Route - get_cfa_by_id")
-    try:
-        cfa_service.delete(cfa_id)
-    except ErrEntityNotFound as e:
-        return JSONResponse(status_code=http.HTTPStatus.NOT_FOUND, content={"msg": str(e)})
-    except Exception as e:
-        logger.error(f"CFA - Route - get_cfa_by_id, err = {e}")
-        return JSONResponse(status_code=http.HTTPStatus.INTERNAL_SERVER_ERROR, content={"msg": str(e)})
-    return JSONResponse(status_code=http.HTTPStatus.OK, content={"msg": "successfully deleted"})
+    response = error_wrapper(cfa_service.delete, cfa_id)
+    if not response:
+        response = JSONResponse(status_code=http.HTTPStatus.OK, content={"msg": "successfully deleted"})
+    return response
 
 
 @router.post(
@@ -108,9 +94,6 @@ async def create(
 
     cfa = CFARequestToCFA(cfa_request)
 
-    try:
-        cfa = cfa_service.create(cfa)
-    except Exception as e:
-        logger.error(f"CFA - Route - get_cfa_by_id, err = {e}")
-        return JSONResponse(status_code=http.HTTPStatus.INTERNAL_SERVER_ERROR, content={"msg": str(e)})
+    error_wrapper(cfa_service.create, cfa)
+
     return cfa
