@@ -14,3 +14,4 @@ class User(BaseModel):
     location: str
     registry: str
     beneficial_owner: str
+

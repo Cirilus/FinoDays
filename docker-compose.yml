@@ -9,7 +9,7 @@ services:
       db:
         condition: service_healthy
     command: >
-      bash -c "alembic upgrade head && poetry run uvicorn app:app --host 0.0.0.0 --port 8000"
+      bash -c "alembic revision --autogenerate -m last_migration && alembic upgrade head && poetry run uvicorn app:app --host 0.0.0.0 --port 8000"
 
   db:
     image: postgres:latest

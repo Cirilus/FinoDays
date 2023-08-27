@@ -13,6 +13,7 @@ from sqlalchemy import (
 
 from sqlalchemy.orm import relationship
 
+
 class User(EntityMeta):
     __tablename__ = "user"
     id = Column(UUID, primary_key=True)

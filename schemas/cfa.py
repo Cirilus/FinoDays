@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from schemas.Company import Company
 from schemas.User import User
+from schemas.PaymentMethod import PaymentMethod
 
 
 class CFA(BaseModel):
@@ -15,7 +16,7 @@ class CFA(BaseModel):
     approved: bool
     price: float
     date_release: datetime
-    payment_method: str
+    payment_method: PaymentMethod
     subject: str
     moderated: bool
     token: str

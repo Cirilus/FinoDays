@@ -12,7 +12,7 @@ from sqlalchemy import (
 from models.BaseModel import EntityMeta
 
 
-class Company(EntityMeta):
-    __tablename__ = "company"
+class PaymentMethods(EntityMeta):
+    __tablename__ = "payment_methods"
     id = Column(UUID, primary_key=True)
-    name = Column(String)
+    name = Column(String, nullable=False, unique=True)
