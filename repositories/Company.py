@@ -3,14 +3,14 @@ from typing import List
 from fastapi import Depends
 
 from configs.Database import get_db_connection
-from models.cfa import CFA
+from models.Company import Company
 from sqlalchemy.orm import Session, lazyload
 
 
-class CFARepository:
+class CompanyRepository:
     def __init__(self, db: Session = Depends(get_db_connection)):
         self.db = db
 
-    def get_cfas(self) -> List[CFA]:
-        query = self.db.query(CFA)
+    def get_companies(self) -> List[Company]:
+        query = self.db.query(Company)
         return query.all()

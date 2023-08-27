@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from configs.Environment import get_environment_variables
-from models import CFA, Company, User
+from models import cfa, Company, User
 from models.BaseModel import EntityMeta
 
 # this is the Alembic Config object, which provides

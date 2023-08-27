@@ -12,7 +12,7 @@ from sqlalchemy import (
 from models.BaseModel import EntityMeta
 
 
-class User(EntityMeta):
+class Company(EntityMeta):
     __tablename__ = "company"
     id = Column(UUID, primary_key=True)
     name = Column(String)
