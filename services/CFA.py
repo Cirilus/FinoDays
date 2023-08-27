@@ -16,7 +16,7 @@ class CFAService:
             self, limit: int, offset: int, moderated: bool, payment_method: str
     ) -> List[CFA]:
         logger.debug("CFA - Service - get_cfas")
-        result = self.cfa_repo.get_cfas(limit, offset,moderated,payment_method)
+        result = self.cfa_repo.get_cfas(limit, offset, moderated, payment_method)
         return result
 
     def get_cfa_by_id(self, id: uuid.UUID) -> CFA:
@@ -26,7 +26,10 @@ class CFAService:
 
     def delete_cfa(self, id: uuid.UUID) -> None:
         logger.debug("CFA - Service - delete_cfa")
-        self.cfa_repo.delete_cfa(id)
+
+        cfa = self.cfa_repo.get_cfa_by_id(id)
+
+        self.cfa_repo.delete_cfa(cfa)
         return None
 
     def update_cfa(self, id: uuid.UUID, cfa: CFA) -> CFA:

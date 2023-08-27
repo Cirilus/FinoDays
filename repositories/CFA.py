@@ -43,8 +43,7 @@ class CFARepository:
         self.db.commit()
         return cfa
 
-    def delete_cfa(self, id: uuid.UUID) -> None:
-        cfa = self.get_cfa_by_id(id)
+    def delete_cfa(self, cfa: CFA) -> None:
         self.db.delete(cfa)
         self.db.commit()
         self.db.flush()
