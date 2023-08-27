@@ -23,7 +23,7 @@ class CFA(EntityMeta):
     approved = Column(Boolean)
     price = Column(Float)
     date_release = Column(TIMESTAMP)
-    payment_method = Column(String)
+    payment_method = Column(UUID, ForeignKey("payment_methods.id"), nullable=True)
     subject = Column(String)
     moderated = Column(Boolean)
     token = Column(String)
