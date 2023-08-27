@@ -1,9 +1,8 @@
 .idea
 __pycache__
-.env
-config.py
+configs/.env
 
-.env
+configs/.env
 .venv
 env/
 venv/
