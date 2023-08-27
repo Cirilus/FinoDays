@@ -6,7 +6,7 @@ from schemas.Company import Company
 
 
 class User(BaseModel):
-    id: str
+    id: uuid.UUID
     company: Company
     name: str
     surname: str
