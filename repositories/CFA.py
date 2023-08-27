@@ -20,3 +20,27 @@ class CFARepository:
         if payment_method:
             query.filter_by(payment_method=payment_method)
         return query.offset(offset).limit(limit).all()
+
+    def get_cfa_by_id(self, id: int) -> CFA:
+        logger.debug("CFA - Repository - get_cfa_by_id")
+        return self.db.get(
+            CFA,
+            id
+        )
+
+    def create_cfa(self, cfa: CFA) -> CFA:
+        self.db.add(CFA)
+        self.db.commit()
+        self.db.refresh(cfa)
+        return cfa
+
+    def update_cfa(self, id: int, cfa: CFA) -> CFA:
+        cfa.id = id
+        self.db.merge(cfa)
+        self.db.commit()
+        return cfa
+
+    def delete_cfa(self, cfa: CFA) -> None:
+        self.db.delete(cfa)
+        self.db.commit()
+        self.db.flush()
