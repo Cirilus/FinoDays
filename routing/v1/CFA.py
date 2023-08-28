@@ -9,7 +9,7 @@ from starlette.responses import JSONResponse
 from utils.errors import ErrEntityNotFound
 from schemas.CFA import CFARequest, CFASchema, CFAResponse
 from services.CFA import CFAService
-from convertors.CFA import CFARequestToCFA
+from convertors.CFA import CFARequestCreateToCFA
 from utils.wrappers import error_wrapper
 
 router = APIRouter(prefix="/api/v1/cfa", tags=["cfa"])
@@ -50,7 +50,7 @@ async def get_by_id(
 
 @router.patch(
     "/{user_id}",
-    response_model=CFASchema,
+    response_model=CFAResponse,
     description="обновление CFA",
 )
 async def update(
@@ -60,7 +60,7 @@ async def update(
 ):
     logger.debug("CFA - Route - get_cfa_by_id")
 
-    cfa = CFARequestToCFA(cfa_request)
+    cfa = CFARequestCreateToCFA(cfa_request)
     cfa = error_wrapper(cfa_service.update, cfa_id, cfa)
     return cfa
 
@@ -92,7 +92,7 @@ async def create(
 ):
     logger.debug("CFA - Route - get_cfa_by_id")
 
-    cfa = CFARequestToCFA(cfa_request)
+    cfa = CFARequestCreateToCFA(cfa_request)
     cfa = error_wrapper(cfa_service.create, cfa)
 
     return cfa

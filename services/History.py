@@ -33,7 +33,7 @@ class HistoryService:
     def create(self, history: History) -> History:
         logger.debug("History - Service - create")
 
-        if history.seller.id == history.recipient.id:
+        if history.seller == history.recipient:
             raise ErrEntityConflict("the seller id should not be equal recipient id")
 
         result = self.history_repo.create(history)

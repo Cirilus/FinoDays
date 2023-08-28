@@ -1,8 +1,7 @@
 from models.cfa import CFA
 from schemas.CFA import CFARequest
 
-
-def CFARequestToCFA(cfa: CFARequest) -> CFA:
+def CFARequestCreateToCFA(cfa: CFARequest) -> CFA:
     result = CFA()
 
     result.user_id = cfa.user_id

@@ -51,3 +51,11 @@ class HistoryRepository:
         self.db.commit()
         self.db.refresh(history)
         return history
+
+    def create_without_commit(self, history: History) -> History:
+        logger.debug("History - Repository - create_without_commit")
+        id = uuid.uuid4()
+        history.id = id
+        self.db.add(history)
+        self.db.commit()
+        return history

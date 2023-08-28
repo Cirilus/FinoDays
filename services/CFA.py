@@ -1,16 +1,22 @@
+from datetime import datetime
 from typing import List
 
 import uuid
 from fastapi import Depends
 from loguru import logger
 
+from models.History import History
 from repositories.CFA import CFARepository
 from models.cfa import CFA
+from services.History import HistoryService
 
 
 class CFAService:
-    def __init__(self, cfa_repo: CFARepository = Depends()) -> None:
+    def __init__(self,
+                 cfa_repo: CFARepository = Depends(),
+                 history_repo: HistoryService = Depends()) -> None:
         self.cfa_repo = cfa_repo
+        self.history_service = history_repo
 
     def get_list(
             self, limit: int, offset: int, moderated: bool, payment_method: str
@@ -34,10 +40,44 @@ class CFAService:
 
     def update(self, id: uuid.UUID, cfa: CFA) -> CFA:
         logger.debug("CFA - Service - update")
+
+        before_cfa = self.get_by_id(id)
+        before_user_id = str(before_cfa.user_id)
+
         result = self.cfa_repo.update(id, cfa)
+
+        if result.user_id != before_user_id:
+            history = History(
+                id=uuid.uuid4(),
+                seller=before_user_id,
+                recipient=cfa.user_id,
+                cfa=cfa.id,
+                count=cfa.count,
+                price=cfa.price,
+                created_at=datetime.utcnow(),
+            )
+
+            self.history_service.create(history)
+
         return result
 
     def create(self, cfa: CFA) -> CFA:
         logger.debug("CFA - Service - create")
+
+        id = uuid.uuid4()
+        cfa.id = id
+
+        history = History(
+            id=uuid.uuid4(),
+            seller=None,
+            recipient=cfa.user_id,
+            cfa=cfa.id,
+            count=cfa.count,
+            price=cfa.price,
+            created_at=datetime.utcnow(),
+        )
+
         result = self.cfa_repo.create(cfa)
+
+        self.history_service.create(history)
         return result
