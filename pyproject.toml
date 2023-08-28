@@ -12,6 +12,8 @@ loguru = "^0.7.0"
 alembic = "^1.11.3"
 psycopg2-binary = "^2.9.7"
 uuid = "^1.30"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = "^1.7.4"
 
 
 [build-system]

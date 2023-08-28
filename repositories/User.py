@@ -26,6 +26,14 @@ class UserRepository:
         if user is None:
             raise ErrEntityNotFound("entity not found")
         return user
+    
+    def get_by_login(self, login: str) -> User:
+        logger.debug("User - REpository get_by_login")
+        user = self.db.get(User, login)
+        
+        if user is None:
+            raise ErrEntityNotFound("entity not found")
+        return user
 
     def create(self, user: User) -> User:
         logger.debug("User - Repository - create")

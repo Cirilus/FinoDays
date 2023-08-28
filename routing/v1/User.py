@@ -1,16 +1,23 @@
 import http
-from typing import List, Optional
+from typing import List, Optional, Annotated
 
 import uuid
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from loguru import logger
 from starlette.responses import JSONResponse
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+
 
 from utils.errors import ErrEntityNotFound
 from schemas.UserSchema import UserRequest, UserSchema
 from services.User import UserService
+from services.Authenticate import AuthService
 from convertors.User import UserRequestToUser
 from utils.wrappers import error_wrapper
+from schemas.Token import Token, TokenData
+
 
 router = APIRouter(prefix="/api/v1/user", tags=["user"])
 
@@ -23,12 +30,12 @@ router = APIRouter(prefix="/api/v1/user", tags=["user"])
 async def get_list(
         limit: Optional[int] = 100,
         offset: Optional[int] = 0,
-        User_service: UserService = Depends()
+        user_service: UserService = Depends()
 ):
     logger.debug("User - Route - get_users")
-    User = error_wrapper(User_service.get_list,
+    user = error_wrapper(user_service.get_list,
                         limit, offset)
-    return User
+    return user
 
 
 @router.get(
@@ -37,12 +44,25 @@ async def get_list(
     description="get user by uuid",
 )
 async def get_by_id(
-        User_id: uuid.UUID,
-        User_service: UserService = Depends()
+        user_id: uuid.UUID,
+        user_service: UserService = Depends()
 ):
     logger.debug("User - Route - get_user_by_id")
-    User = error_wrapper(User_service.get_by_id, User_id)
-    return User
+    user = error_wrapper(user_service.get_by_id, user_id)
+    return user
+
+
+@router.get(
+    "/me",
+    response_model=UserSchema,
+    description="get current user"
+)
+async def get_current_user(
+        auth_service: AuthService = Depends()
+):
+    logger.debug("User - Route get_current_user")
+    user = error_wrapper(auth_service.get_current_user)
+    return user
 
 
 @router.patch(
@@ -51,15 +71,15 @@ async def get_by_id(
     description="update user",
 )
 async def update(
-        User_id: uuid.UUID,
-        User_request: UserRequest,
-        User_service: UserService = Depends()
+        user_id: uuid.UUID,
+        user_request: UserRequest,
+        user_service: UserService = Depends()
 ):
     logger.debug("User - Route - get_user_by_id")
 
-    User = UserRequestToUser(User_request)
-    User = error_wrapper(User_service.update, User_id, User)
-    return User
+    user = UserRequestToUser(user_request)
+    user = error_wrapper(user_service.update, user_id, user)
+    return user
 
 
 @router.delete(
@@ -68,11 +88,11 @@ async def update(
     description="delete user",
 )
 async def delete(
-        User_id: uuid.UUID,
-        User_service: UserService = Depends()
+        user_id: uuid.UUID,
+        user_service: UserService = Depends()
 ):
     logger.debug("User - Route - get_user_by_id")
-    response = error_wrapper(User_service.delete, User_id)
+    response = error_wrapper(user_service.delete, user_id)
     if not response:
         response = JSONResponse(status_code=http.HTTPStatus.OK, content={"msg": "successfully deleted"})
     return response
@@ -84,13 +104,27 @@ async def delete(
     description="create User",
 )
 async def create(
-        User_request: UserRequest,
-        User_service: UserService = Depends()
+        user_request: UserRequest,
+        user_service: UserService = Depends()
 ):
     logger.debug("User - Route - get_user_by_id")
 
-    User = UserRequestToUser(User_request)
+    user = UserRequestToUser(user_request)
 
-    error_wrapper(User_service.create, User)
+    error_wrapper(user_service.create, user)
 
-    return User
+    return user
+
+@router.post(
+    "/token", 
+    response_model=Token,
+    description="get access token by login in")
+async def login_for_access_token(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    auth_service: AuthService = Depends()
+):
+    logger.debug("User - Route - login_for_access_token")
+    resp = error_wrapper(auth_service.login_for_access_token, form_data)
+    
+    return resp
+

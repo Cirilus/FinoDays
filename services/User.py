@@ -21,6 +21,11 @@ class UserService:
         logger.debug("User - Service - get_user_by_id")
         result = self.User_repo.get_by_id(id)
         return result
+    
+    def get_by_login(self, login: str) -> User:
+        logger.debug("User - Service get_user_by_login")
+        result = self.User_repo.get_by_login(login)
+        return result
 
     def delete(self, id: uuid.UUID) -> None:
         logger.debug("User - Service - delete_user")
