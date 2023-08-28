@@ -101,7 +101,7 @@ class AuthService:
     async def login_for_access_token(
         self,
         form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
-):
+) -> Token:
         user = self.authenticate_user(form_data.username, form_data.password)
         if not user:
             raise HTTPException(
@@ -114,4 +114,8 @@ class AuthService:
             data={"sub": user.username}, expires_delta=access_token_expires
         )
         
-        return {"access_token": access_token, "token_type": "bearer"}
+        response = Token()
+        response.access_token = access_token
+        response.token_type = "bearer"
+        
+        return response
