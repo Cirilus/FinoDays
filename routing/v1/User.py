@@ -9,7 +9,6 @@ from starlette.responses import JSONResponse
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-
 from utils.errors import ErrEntityNotFound
 from schemas.UserSchema import UserRequest, UserSchema
 from services.User import UserService
@@ -124,7 +123,8 @@ async def login_for_access_token(
     auth_service: AuthService = Depends()
 ):
     logger.debug("User - Route - login_for_access_token")
-    resp = error_wrapper(auth_service.login_for_access_token, form_data)
-    
+    # resp = error_wrapper(auth_service.login_for_access_token, form_data)
+    resp = auth_service.login_for_access_token(form_data)
+    logger.debug(resp)
     return resp
 

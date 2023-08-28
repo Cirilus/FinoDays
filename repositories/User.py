@@ -29,7 +29,7 @@ class UserRepository:
     
     def get_by_login(self, login: str) -> User:
         logger.debug("User - REpository get_by_login")
-        user = self.db.get(User, login)
+        return self.db.query(User).filter_by(login=login).first()
         
         if user is None:
             raise ErrEntityNotFound("entity not found")
