@@ -17,6 +17,9 @@ from sqlalchemy.orm import relationship
 class User(EntityMeta):
     __tablename__ = "user"
     id = Column(UUID, primary_key=True)
+    
+    login = Column(String)
+    password_hashed = Column(String)
 
     company = Column(UUID, ForeignKey("company.id"))
 

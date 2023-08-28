@@ -1,5 +1,5 @@
 up:
-	uvicorn app:app --reload
+	poetry run uvicorn app:app --reload --port 8000
 
 .PHONY: migrate-revision
 migrate-revision:

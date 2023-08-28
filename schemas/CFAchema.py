@@ -4,13 +4,13 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from schemas.Company import Company
-from schemas.User import User
+from schemas.UserSchema import UserSchema
 from schemas.PaymentMethodSchema import PaymentMethodSchema
 
 
 class CFASchema(BaseModel):
     id: uuid.UUID
-    user: User
+    user: UserSchema
     company: Company
     count: int
     approved: bool
