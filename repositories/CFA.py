@@ -33,9 +33,10 @@ class CFARepository:
 
     def create(self, cfa: CFA) -> CFA:
         logger.debug("CFA - Repository - create")
+
         id = uuid.uuid4()
         cfa.id = id
-        self.db.add(CFA)
+        self.db.add(cfa)
         self.db.commit()
         self.db.refresh(cfa)
         return cfa

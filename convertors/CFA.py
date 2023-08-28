@@ -1,13 +1,12 @@
 from models.cfa import CFA
-from schemas.CFAchema import CFARequest
+from schemas.CFA import CFARequest
 
 
 def CFARequestToCFA(cfa: CFARequest) -> CFA:
     result = CFA()
 
-    result.user.id = cfa.user
-    result.company.id = cfa.company
-
+    result.user_id = cfa.user_id
+    result.company_id = cfa.company_id
     result.count = cfa.count
     result.approved = cfa.approved
     result.price = cfa.price
@@ -16,5 +15,4 @@ def CFARequestToCFA(cfa: CFARequest) -> CFA:
     result.subject = cfa.subject
     result.moderated = cfa.moderated
     result.token = cfa.token
-
     return result

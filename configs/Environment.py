@@ -19,5 +19,4 @@ class EnvironmentSettings(BaseSettings):
 
 @lru_cache
 def get_environment_variables() -> EnvironmentSettings:
-    print(os.getcwd())
     return EnvironmentSettings()

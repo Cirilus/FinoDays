@@ -7,7 +7,7 @@ from loguru import logger
 from starlette.responses import JSONResponse
 
 from utils.errors import ErrEntityNotFound
-from schemas.CFAchema import CFARequest, CFASchema
+from schemas.CFA import CFARequest, CFASchema, CFAResponse
 from services.CFA import CFAService
 from convertors.CFA import CFARequestToCFA
 from utils.wrappers import error_wrapper
@@ -17,7 +17,7 @@ router = APIRouter(prefix="/api/v1/cfa", tags=["cfa"])
 
 @router.get(
     "",
-    response_model=List[CFASchema],
+    response_model=List[CFAResponse],
     description="получение всех CFA",
 )
 async def get_list(
@@ -83,7 +83,7 @@ async def delete(
 
 @router.post(
     "",
-    response_model=CFASchema,
+    response_model=CFAResponse,
     description="создание CFA",
 )
 async def create(
@@ -93,7 +93,6 @@ async def create(
     logger.debug("CFA - Route - get_cfa_by_id")
 
     cfa = CFARequestToCFA(cfa_request)
-
-    error_wrapper(cfa_service.create, cfa)
+    cfa = error_wrapper(cfa_service.create, cfa)
 
     return cfa
