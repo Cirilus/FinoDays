@@ -20,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 env = get_environment_variables()
 
 if not env.DEBUG:

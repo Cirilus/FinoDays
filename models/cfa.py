@@ -27,3 +27,18 @@ class CFA(EntityMeta):
     subject = Column(String)
     moderated = Column(Boolean)
     token = Column(String)
+
+    def normalize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "company_id": self.company_id,
+            "count": self.count,
+            "approved": self.approved,
+            "price": self.price,
+            "date_release": self.date_release,
+            "payment_method": self.payment_method,
+            "subject": self.subject,
+            "moderated": self.moderated,
+            "token": self.token
+        }
