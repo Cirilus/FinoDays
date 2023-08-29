@@ -10,7 +10,7 @@ from models.PaymentMethod import PaymentMethod
 from models.User import User
 from utils.errors import ErrEntityNotFound
 from models.cfa import CFA
-from sqlalchemy.orm import Session, joinedload, undefer
+from sqlalchemy.orm import Session, joinedload
 
 
 class CFARepository:
