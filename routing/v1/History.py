@@ -35,7 +35,7 @@ async def get_list(
 
 
 @router.get(
-    "/{user_id}",
+    "/{history_id}",
     response_model=HistorySchema,
     description="получение History по uuid",
 )
