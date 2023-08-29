@@ -27,7 +27,7 @@ class User(EntityMeta):
     surname = Column(String)
     middelname = Column(String)
     location = Column(String)
-    registry = Column(String, unique=True)
+    registry = Column(String)
     beneficial_owner = Column(String)
 
     cfa = relationship("CFA", backref="user")

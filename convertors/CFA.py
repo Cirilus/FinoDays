@@ -1,7 +1,7 @@
 from loguru import logger
 
 from models.cfa import CFA
-from schemas.CFA import CFARequest, CFASchema
+from schemas.CFASchema import CFARequest, CFASchema
 
 
 def CFARequestCreateToCFA(cfa: CFARequest) -> CFA:

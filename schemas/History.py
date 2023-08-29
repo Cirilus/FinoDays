@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from schemas.CFA import CFASchema
+from schemas.CFASchema import CFASchema
 from schemas.UserSchema import UserSchema
 
 

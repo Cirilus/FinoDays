@@ -9,11 +9,12 @@ from starlette.responses import JSONResponse
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
+from models.User import User
 from utils.errors import ErrEntityNotFound
-from schemas.UserSchema import UserRequest, UserSchema
+from schemas.UserSchema import UserRequest, UserSchema, UserResponse, TokenUser
 from services.User import UserService
 from services.Authenticate import AuthService
-from convertors.User import UserRequestToUser
+from convertors.User import UserRequestToUser, UserToUserReponse
 from utils.wrappers import error_wrapper
 from schemas.Token import Token, TokenData
 
@@ -23,7 +24,7 @@ router = APIRouter(prefix="/api/v1/user", tags=["user"])
 
 @router.get(
     "",
-    response_model=List[UserSchema],
+    response_model=List[UserResponse],
     description="get all users",
 )
 async def get_list(
@@ -53,15 +54,17 @@ async def get_by_id(
 
 @router.get(
     "/me",
-    response_model=UserSchema,
+    response_model=TokenUser,
     description="get current user"
 )
 async def get_current_user(
-        auth_service: AuthService = Depends()
+        current_user: Annotated[TokenUser, Depends(AuthService().get_current_user)]
 ):
     logger.debug("User - Route get_current_user")
-    user = error_wrapper(auth_service.get_current_user)
-    return user
+
+    logger.debug(current_user)
+
+    return current_user
 
 
 @router.patch(
@@ -99,7 +102,7 @@ async def delete(
 
 @router.post(
     "",
-    response_model=UserSchema,
+    response_model=UserResponse,
     description="create User",
 )
 async def create(
@@ -109,13 +112,14 @@ async def create(
     logger.debug("User - Route - get_user_by_id")
 
     user = UserRequestToUser(user_request)
+    user_response = error_wrapper(user_service.create, user)
 
-    error_wrapper(user_service.create, user)
+    return user_response
 
-    return user
+
 
 @router.post(
-    "/token", 
+    "/token",
     response_model=Token,
     description="get access token by login in")
 async def login_for_access_token(
@@ -123,8 +127,6 @@ async def login_for_access_token(
     auth_service: AuthService = Depends()
 ):
     logger.debug("User - Route - login_for_access_token")
-    # resp = error_wrapper(auth_service.login_for_access_token, form_data)
-    resp = auth_service.login_for_access_token(form_data)
-    logger.debug(resp)
+    resp = error_wrapper(auth_service.login_for_access_token, form_data)
     return resp
 

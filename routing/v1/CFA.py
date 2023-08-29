@@ -8,7 +8,7 @@ from loguru import logger
 from starlette.responses import JSONResponse
 
 from utils.errors import ErrEntityNotFound
-from schemas.CFA import CFARequest, CFASchema, CFAResponse
+from schemas.CFASchema import CFARequest, CFASchema, CFAResponse
 from services.CFA import CFAService
 from convertors.CFA import CFARequestCreateToCFA, CFAToCFASchema
 from utils.wrappers import error_wrapper

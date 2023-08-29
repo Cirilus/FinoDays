@@ -28,8 +28,8 @@ class UserRepository:
         return user
     
     def get_by_login(self, login: str) -> User:
-        logger.debug("User - REpository get_by_login")
-        return self.db.query(User).filter_by(login=login).first()
+        logger.debug("User - Repository get_by_login")
+        user = self.db.query(User).filter_by(login=login).first()
         
         if user is None:
             raise ErrEntityNotFound("entity not found")

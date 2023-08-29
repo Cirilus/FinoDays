@@ -35,6 +35,7 @@ class CFAResponse(BaseModel):
     moderated: bool
     token: str
 
+
 class CFARequest(BaseModel):
     user_id: uuid.UUID
     company_id: uuid.UUID
