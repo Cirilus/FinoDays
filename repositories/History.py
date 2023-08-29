@@ -24,15 +24,14 @@ class HistoryRepository:
         logger.debug("History - Repository - get_list")
         query = self.db.query(History)
         if user:
-            query.filter(or_(History.seller == user, History.recipient == user))
+            query = query.filter(or_(History.seller == user, History.recipient == user))
         if cfa:
-            query.filter_by(cfa=cfa)
+            query = query.filter_by(cfa=cfa)
         if date:
-            query.filter(History.created_at < date)
+            query = query.filter(History.created_at < date)
+        history_list = query.offset(offset).limit(limit).all()
+        return history_list
 
-        return query.offset(offset).limit(limit).all()
-
-    # TODO add the join
     def get_by_id(self, id: uuid.UUID) -> History:
         logger.debug("History - Repository - get_by_id")
         history = self.db.get(

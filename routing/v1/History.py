@@ -30,14 +30,14 @@ async def get_list(
 ):
     logger.debug("History - Route - get_list")
     history = error_wrapper(history_service.get_list,
-                            limit, offset, moderated, payment_method, cfa_id
+                            offset, limit, moderated, payment_method, cfa_id
                             )
     return history
 
 
 @router.get(
     "/{history_id}",
-    response_model=HistorySchema,
+    response_model=HistoryResponse,
     description="получение History по uuid",
 )
 async def get_by_id(
