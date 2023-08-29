@@ -5,6 +5,9 @@ from fastapi import Depends
 from loguru import logger
 
 from configs.Database import get_db_connection
+from models.Company import Company
+from models.PaymentMethod import PaymentMethod
+from models.User import User
 from utils.errors import ErrEntityNotFound
 from models.cfa import CFA
 from sqlalchemy.orm import Session
@@ -25,7 +28,10 @@ class CFARepository:
 
     def get_by_id(self, id: uuid.UUID) -> CFA:
         logger.debug("CFA - Repository - get_by_id")
-        cfa = self.db.get(CFA, id)
+        cfa = self.db.get(
+            CFA,
+            id
+        )
 
         if cfa is None:
             raise ErrEntityNotFound("entity not found")
@@ -33,9 +39,8 @@ class CFARepository:
 
     def create(self, cfa: CFA) -> CFA:
         logger.debug("CFA - Repository - create")
-        id = uuid.uuid4()
-        cfa.id = id
-        self.db.add(CFA)
+
+        self.db.add(cfa)
         self.db.commit()
         self.db.refresh(cfa)
         return cfa

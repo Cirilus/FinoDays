@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from schemas.Company import Company
 
 
-class User(BaseModel):
+class UserSchema(BaseModel):
     id: uuid.UUID
     company: Company
     name: str

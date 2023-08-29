@@ -13,7 +13,7 @@ from models.BaseModel import EntityMeta
 
 
 class CFA(EntityMeta):
-    __tablename__ = "CFA"
+    __tablename__ = "cfa"
     id = Column(UUID, primary_key=True)
 
     user_id = Column(UUID, ForeignKey("user.id"), nullable=False)

@@ -5,7 +5,6 @@ from sqlalchemy import pool
 
 from alembic import context
 from configs.Environment import get_environment_variables
-from models import cfa, Company, User, PaymentMethod
 from models.BaseModel import EntityMeta
 
 # this is the Alembic Config object, which provides
@@ -77,7 +76,8 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection, target_metadata=target_metadata,
+            compare_type=True
         )
 
         with context.begin_transaction():

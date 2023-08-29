@@ -29,7 +29,7 @@ async def get_list(
 
 
 @router.get(
-    "/{user_id}",
+    "/{payment_method_id}",
     response_model=PaymentMethodSchema,
     description="получение payment_method по uuid",
 )
@@ -44,7 +44,7 @@ async def get_by_id(
 
 
 @router.patch(
-    "/{user_id}",
+    "/{payment_method_id}",
     response_model=PaymentMethodSchema,
     description="обновление payment_method",
 )
@@ -63,7 +63,7 @@ async def update(
 
 
 @router.delete(
-    "/{user_id}",
+    "/{payment_method_id}",
     responses={200: {"msg": "successfully deleted"}},
     description="удаление payment_method",
 )
