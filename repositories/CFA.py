@@ -20,10 +20,14 @@ class CFARepository:
     def get_list(self, limit: int, offset: int, moderated: bool, payment_method: str) -> List[CFA]:
         logger.debug("CFA - Repository - get_list")
         query = self.db.query(CFA)
+        query = query.join(Company, Company.id == CFA.company_id)
         if moderated:
-            query.filter_by(moderated=moderated)
+            query = query.filter_by(moderated=moderated)
         if payment_method:
-            query.filter_by(payment_method=payment_method)
+            query = query.filter_by(payment_method=payment_method)
+
+        logger.debug(query)
+
         return query.offset(offset).limit(limit).all()
 
     def get_by_id(self, id: uuid.UUID) -> CFA:

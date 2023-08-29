@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: FinoDays
     app.kubernetes.io/component: service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app.kubernetes.io/name: FinoDays
     app.kubernetes.io/component: service

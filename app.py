@@ -2,6 +2,7 @@ import sys
 
 from fastapi import FastAPI
 from loguru import logger
+from starlette.middleware.cors import CORSMiddleware
 
 from configs.Environment import get_environment_variables
 from routing.v1.CFA import router as cfa_router
@@ -10,6 +11,15 @@ from routing.v1.PaymentMethod import router as payment_router
 from routing.v1.History import router as history_router
 
 app = FastAPI(openapi_url="/core/openapi.json", docs_url="/core/docs")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins='*',
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 env = get_environment_variables()
 
