@@ -1,5 +1,8 @@
+from loguru import logger
+
 from models.cfa import CFA
-from schemas.CFA import CFARequest
+from schemas.CFA import CFARequest, CFASchema
+
 
 def CFARequestCreateToCFA(cfa: CFARequest) -> CFA:
     result = CFA()
@@ -14,4 +17,22 @@ def CFARequestCreateToCFA(cfa: CFARequest) -> CFA:
     result.subject = cfa.subject
     result.moderated = cfa.moderated
     result.token = cfa.token
+    return result
+
+
+def CFAToCFASchema(cfa: CFA) -> CFASchema:
+    result = CFASchema(
+        id=cfa.id,
+        user=cfa.user.normalize(),
+        company=cfa.company.normalize(),
+        payment_method=cfa.Payment_method.normalize(),
+        count=cfa.count,
+        approved=cfa.approved,
+        price=cfa.price,
+        date_release=cfa.date_release,
+        subject=cfa.subject,
+        moderated=cfa.moderated,
+        token=cfa.token,
+    )
+
     return result

@@ -8,6 +8,7 @@ from sqlalchemy import (
     Float,
     TIMESTAMP, ForeignKey
 )
+from sqlalchemy.orm import relationship
 
 from models.BaseModel import EntityMeta
 
@@ -17,6 +18,7 @@ class PaymentMethod(EntityMeta):
     id = Column(UUID, primary_key=True)
     name = Column(String, nullable=False, unique=True)
 
+    cfa = relationship("CFA", backref="Payment_method")
     def normalize(self):
         return {
             "id": self.id,

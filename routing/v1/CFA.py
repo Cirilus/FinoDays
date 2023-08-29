@@ -2,6 +2,7 @@ import http
 from typing import List, Optional
 
 import uuid
+
 from fastapi import APIRouter, Depends
 from loguru import logger
 from starlette.responses import JSONResponse
@@ -9,7 +10,7 @@ from starlette.responses import JSONResponse
 from utils.errors import ErrEntityNotFound
 from schemas.CFA import CFARequest, CFASchema, CFAResponse
 from services.CFA import CFAService
-from convertors.CFA import CFARequestCreateToCFA
+from convertors.CFA import CFARequestCreateToCFA, CFAToCFASchema
 from utils.wrappers import error_wrapper
 
 router = APIRouter(prefix="/api/v1/cfa", tags=["cfa"])
@@ -30,6 +31,8 @@ async def get_list(
     cfa = error_wrapper(cfa_service.get_list,
                         limit, offset, moderated, payment_method
                         )
+    if type(cfa) != JSONResponse:
+        cfa = [CFAToCFASchema(c) for c in cfa]
     return cfa
 
 

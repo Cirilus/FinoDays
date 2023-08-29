@@ -27,6 +27,8 @@ class User(EntityMeta):
     registry = Column(String, unique=True)
     beneficial_owner = Column(String)
 
+    cfa = relationship("CFA", backref="user")
+
     def normalize(self):
         return {
             "id": self.id,
