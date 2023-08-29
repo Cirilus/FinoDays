@@ -35,8 +35,8 @@ async def get_list(
 
 
 @router.get(
-    "/{user_id}",
-    response_model=CFASchema,
+    "/{cfa_id}",
+    response_model=CFAResponse,
     description="получение CFA по uuid",
 )
 async def get_by_id(
@@ -49,7 +49,7 @@ async def get_by_id(
 
 
 @router.patch(
-    "/{user_id}",
+    "/{cfa_id}",
     response_model=CFAResponse,
     description="обновление CFA",
 )
@@ -66,7 +66,7 @@ async def update(
 
 
 @router.delete(
-    "/{user_id}",
+    "/{cfa_id}",
     responses={200: {"msg": "successfully deleted"}},
     description="удаление CFA",
 )

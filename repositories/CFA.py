@@ -28,21 +28,13 @@ class CFARepository:
 
     def get_by_id(self, id: uuid.UUID) -> CFA:
         logger.debug("CFA - Repository - get_by_id")
-        query = (
-            self.db.query(CFA)
-            .join(User, User.id == CFA.user_id)
-            .join(Company, Company.id == CFA.company_id)
-            .join(PaymentMethod, PaymentMethod.id == CFA.payment_method)
-            .filter(CFA.user_id == id)
+        cfa = self.db.get(
+            CFA,
+            id
         )
-
-        cfa = query.first()
-
-        logger.debug(cfa)
 
         if cfa is None:
             raise ErrEntityNotFound("entity not found")
-
         return cfa
 
     def create(self, cfa: CFA) -> CFA:
