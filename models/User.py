@@ -36,6 +36,7 @@ class User(EntityMeta):
         return {
             "id": self.id,
             "company": self.company,
+            "login": self.login,
             "name": self.name,
             "surname": self.surname,
             "middelname": self.middelname,

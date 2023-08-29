@@ -8,6 +8,7 @@ def UserRequestToUser(user: UserRequest) -> User:
     result.company = user.company
     result.login = user.login
     result.password_hashed = user.password_hashed
+    result.login = user.login
     result.company = user.company
     result.name = user.name
     result.surname = user.surname
@@ -26,6 +27,7 @@ def UserToUserReponse(user: User) -> UserResponse:
     result.login = user.login
     result.password_hashed = user.password_hashed
     result.company = user.company
+    result.login = user.login
     result.name = user.name
     result.surname = user.surname
     result.middelname = user.middelname

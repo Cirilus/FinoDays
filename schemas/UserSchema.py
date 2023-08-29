@@ -8,7 +8,6 @@ from schemas.Company import Company
 class UserSchema(BaseModel):
     id: uuid.UUID
     login: str
-    password_hashed: str
     company: Company
     name: str
     surname: str
@@ -41,7 +40,6 @@ class TokenUser(BaseModel):
 class UserRequest(BaseModel):
     company: uuid.UUID
     login: str
-    password_hashed: str
     name: str
     surname: str
     middelname: str
