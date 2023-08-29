@@ -15,3 +15,13 @@ class UserSchema(BaseModel):
     registry: str
     beneficial_owner: str
 
+
+class UserResponse(BaseModel):
+    id: uuid.UUID
+    company: uuid.UUID
+    name: str
+    surname: str
+    middelname: str
+    location: str
+    registry: str
+    beneficial_owner: str

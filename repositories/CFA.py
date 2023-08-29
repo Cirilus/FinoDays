@@ -10,7 +10,7 @@ from models.PaymentMethod import PaymentMethod
 from models.User import User
 from utils.errors import ErrEntityNotFound
 from models.cfa import CFA
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, undefer
 
 
 class CFARepository:
@@ -19,24 +19,20 @@ class CFARepository:
 
     def get_list(self, limit: int, offset: int, moderated: bool, payment_method: str) -> List[CFA]:
         logger.debug("CFA - Repository - get_list")
-        query = self.db.query(CFA, Company, User, PaymentMethod)
+        query = self.db.query(CFA)
+
         query = (query.join(Company, Company.id == CFA.company_id).
                  join(User, CFA.user_id == User.id).
                  join(PaymentMethod, PaymentMethod.id == CFA.payment_method))
+
         if moderated:
             query = query.filter_by(moderated=moderated)
         if payment_method:
             query = query.filter_by(payment_method=payment_method)
 
+        query = query.options(joinedload(CFA.company), joinedload(CFA.user), joinedload(CFA.Payment_method))
         query = query.offset(offset).limit(limit).all()
-
-        result = []
-        for object in query:
-            result = object[0]
-            result.company_id = object[1]
-            result.user_id = object[2]
-            result.payment_method = object[3]
-        return result
+        return query
 
     def get_by_id(self, id: uuid.UUID) -> CFA:
         logger.debug("CFA - Repository - get_by_id")

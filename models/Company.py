@@ -18,7 +18,7 @@ class Company(EntityMeta):
     id = Column(UUID, primary_key=True)
     name = Column(String)
 
-    relationship("CFA", back_populates="company")
+    cfa = relationship("CFA", backref="company")
 
     def normalize(self):
         return {

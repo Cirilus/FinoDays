@@ -8,6 +8,7 @@ from sqlalchemy import (
     Float,
     TIMESTAMP, ForeignKey
 )
+from sqlalchemy.orm import relationship
 
 from models.BaseModel import EntityMeta
 
