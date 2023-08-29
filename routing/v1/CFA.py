@@ -18,6 +18,7 @@ router = APIRouter(prefix="/api/v1/cfa", tags=["cfa"])
 
 @router.get(
     "",
+    response_model=List[CFASchema],
     description="получение всех CFA",
 )
 async def get_list(
