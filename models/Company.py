@@ -19,3 +19,9 @@ class Company(EntityMeta):
     name = Column(String)
 
     relationship("CFA", back_populates="company")
+
+    def normalize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }

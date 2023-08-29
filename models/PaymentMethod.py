@@ -16,3 +16,9 @@ class PaymentMethod(EntityMeta):
     __tablename__ = "payment_methods"
     id = Column(UUID, primary_key=True)
     name = Column(String, nullable=False, unique=True)
+
+    def normalize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
