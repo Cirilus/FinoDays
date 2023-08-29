@@ -25,11 +25,12 @@ async def get_list(
         offset: Optional[int] = 0,
         moderated: Optional[bool] = None,
         payment_method: Optional[str] = None,
+        cfa_id: Optional[uuid.UUID] = None,
         history_service: HistoryService = Depends()
 ):
     logger.debug("History - Route - get_list")
     history = error_wrapper(history_service.get_list,
-                            limit, offset, moderated, payment_method
+                            limit, offset, moderated, payment_method, cfa_id
                             )
     return history
 
