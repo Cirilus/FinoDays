@@ -29,3 +29,17 @@ class User(EntityMeta):
     location = Column(String)
     registry = Column(String, unique=True)
     beneficial_owner = Column(String)
+
+    cfa = relationship("CFA", backref="user")
+
+    def normalize(self):
+        return {
+            "id": self.id,
+            "company": self.company,
+            "name": self.name,
+            "surname": self.surname,
+            "middelname": self.middelname,
+            "location": self.location,
+            "registry": self.registry,
+            "beneficial_owner": self.beneficial_owner
+        }

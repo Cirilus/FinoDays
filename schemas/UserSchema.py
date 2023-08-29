@@ -7,19 +7,6 @@ from schemas.Company import Company
 
 class UserSchema(BaseModel):
     id: uuid.UUID
-    login: str
-    password_hashed: str
-    company: Company
-    name: str
-    surname: str
-    middelname: str
-    location: str
-    registry: str
-    beneficial_owner: str
-    
-class UserRequest(BaseModel):
-    login: str
-    password_hashed: str
     company: Company
     name: str
     surname: str
@@ -28,3 +15,13 @@ class UserRequest(BaseModel):
     registry: str
     beneficial_owner: str
 
+
+class UserResponse(BaseModel):
+    id: uuid.UUID
+    company: uuid.UUID
+    name: str
+    surname: str
+    middelname: str
+    location: str
+    registry: str
+    beneficial_owner: str

@@ -2,14 +2,15 @@ import http
 from typing import List, Optional
 
 import uuid
+
 from fastapi import APIRouter, Depends
 from loguru import logger
 from starlette.responses import JSONResponse
 
 from utils.errors import ErrEntityNotFound
-from schemas.CFAchema import CFARequest, CFASchema
+from schemas.CFA import CFARequest, CFASchema, CFAResponse
 from services.CFA import CFAService
-from convertors.CFA import CFARequestToCFA
+from convertors.CFA import CFARequestCreateToCFA, CFAToCFASchema
 from utils.wrappers import error_wrapper
 
 router = APIRouter(prefix="/api/v1/cfa", tags=["cfa"])
@@ -31,12 +32,14 @@ async def get_list(
     cfa = error_wrapper(cfa_service.get_list,
                         limit, offset, moderated, payment_method
                         )
+    if type(cfa) != JSONResponse:
+        cfa = [CFAToCFASchema(c) for c in cfa]
     return cfa
 
 
 @router.get(
-    "/{user_id}",
-    response_model=CFASchema,
+    "/{cfa_id}",
+    response_model=CFAResponse,
     description="получение CFA по uuid",
 )
 async def get_by_id(
@@ -49,8 +52,8 @@ async def get_by_id(
 
 
 @router.patch(
-    "/{user_id}",
-    response_model=CFASchema,
+    "/{cfa_id}",
+    response_model=CFAResponse,
     description="обновление CFA",
 )
 async def update(
@@ -60,13 +63,13 @@ async def update(
 ):
     logger.debug("CFA - Route - get_cfa_by_id")
 
-    cfa = CFARequestToCFA(cfa_request)
+    cfa = CFARequestCreateToCFA(cfa_request)
     cfa = error_wrapper(cfa_service.update, cfa_id, cfa)
     return cfa
 
 
 @router.delete(
-    "/{user_id}",
+    "/{cfa_id}",
     responses={200: {"msg": "successfully deleted"}},
     description="удаление CFA",
 )
@@ -83,7 +86,7 @@ async def delete(
 
 @router.post(
     "",
-    response_model=CFASchema,
+    response_model=CFAResponse,
     description="создание CFA",
 )
 async def create(
@@ -92,8 +95,7 @@ async def create(
 ):
     logger.debug("CFA - Route - get_cfa_by_id")
 
-    cfa = CFARequestToCFA(cfa_request)
-
-    error_wrapper(cfa_service.create, cfa)
+    cfa = CFARequestCreateToCFA(cfa_request)
+    cfa = error_wrapper(cfa_service.create, cfa)
 
     return cfa

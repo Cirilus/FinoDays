@@ -5,9 +5,12 @@ from fastapi import Depends
 from loguru import logger
 
 from configs.Database import get_db_connection
+from models.Company import Company
+from models.PaymentMethod import PaymentMethod
+from models.User import User
 from utils.errors import ErrEntityNotFound
 from models.cfa import CFA
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 
 class CFARepository:
@@ -17,15 +20,26 @@ class CFARepository:
     def get_list(self, limit: int, offset: int, moderated: bool, payment_method: str) -> List[CFA]:
         logger.debug("CFA - Repository - get_list")
         query = self.db.query(CFA)
+
+        query = (query.join(Company, Company.id == CFA.company_id).
+                 join(User, CFA.user_id == User.id).
+                 join(PaymentMethod, PaymentMethod.id == CFA.payment_method))
+
         if moderated:
-            query.filter_by(moderated=moderated)
+            query = query.filter_by(moderated=moderated)
         if payment_method:
-            query.filter_by(payment_method=payment_method)
-        return query.offset(offset).limit(limit).all()
+            query = query.filter_by(payment_method=payment_method)
+
+        query = query.options(joinedload(CFA.company), joinedload(CFA.user), joinedload(CFA.Payment_method))
+        query = query.offset(offset).limit(limit).all()
+        return query
 
     def get_by_id(self, id: uuid.UUID) -> CFA:
         logger.debug("CFA - Repository - get_by_id")
-        cfa = self.db.get(CFA, id)
+        cfa = self.db.get(
+            CFA,
+            id
+        )
 
         if cfa is None:
             raise ErrEntityNotFound("entity not found")
@@ -33,9 +47,8 @@ class CFARepository:
 
     def create(self, cfa: CFA) -> CFA:
         logger.debug("CFA - Repository - create")
-        id = uuid.uuid4()
-        cfa.id = id
-        self.db.add(CFA)
+
+        self.db.add(cfa)
         self.db.commit()
         self.db.refresh(cfa)
         return cfa
