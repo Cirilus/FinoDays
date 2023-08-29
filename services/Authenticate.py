@@ -9,7 +9,7 @@ from passlib.context import CryptContext
 from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from services.User import UserService, get_user_service
+from services.User import UserService
 from repositories.User import UserRepository
 from schemas.Token import Token, TokenData
 
