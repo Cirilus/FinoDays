@@ -10,7 +10,6 @@ from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from services.User import UserService
-from utils.wrappers import error_wrapper
 from schemas.Token import Token, TokenData
 
 
@@ -74,7 +73,7 @@ class AuthService:
 
     def get_current_user(
             self,
-            token
+            token: Annotated[str, Depends(OAuth2PasswordBearer(tokenUrl="token"))]
     ):
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

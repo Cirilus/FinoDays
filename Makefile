@@ -3,8 +3,8 @@ up:
 
 .PHONY: migrate-revision
 migrate-revision:
-	alembic revision --autogenerate -m $(name)
+	poetry run alembic revision --autogenerate -m $(name)
 
 .PHONY: migrate-up
 migrate-up:
-	alembic upgrade $(rev)
+	poetry run alembic upgrade $(rev)
